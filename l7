@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+    
+    triggers {
+        githubPush()
+    }
+    
+    tools {
+        jdk 'openjdk'   // Must match your Jenkins JDK name
+        maven 'maven'   // Must match your Jenkins Maven name
+    }
+    
+    stages {
+        stage('Clone') {
+            steps {
+                git branch: 'main', url: 'https://github.com/abhitengsal3-hash/java11-examples.git'
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        
+        stage('Archive') {
+            steps {
+                archiveArtifacts artifacts: 'target/*.jar', followSymlinks: false
+            }
+        }
+    }
+    
+    post {
+        success {
+            echo "Build succeeded!"
+        }
+        failure {
+            echo "Build failed!"
+        }
+    }
+}
+
