@@ -3,11 +3,11 @@
 
 name: Maven Package
 
-on:
+on: push
   release:
     types: [created]
 
-jobs:
+jobs: dast
   build:
 
     runs-on: ubuntu-latest
